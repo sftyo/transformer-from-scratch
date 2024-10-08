@@ -7,10 +7,10 @@ import torch.nn.functional as F
 class MultiHeadAttention(nn.Module):
     def __init__(self, cfg):
         super().__init__()
-        assert (cfg['d_out'] % cfg['n_heads'] == 0), \
+        assert (cfg['emb_dim'] % cfg['n_heads'] == 0), \
             "d_out has to be divisble by n_heads"
 
-        self.d_out = cfg['d_out']
+        self.d_out = cfg['emb_dim']
         self.n_head = cfg['n_heads']
         self.head_dim = self.d_out // self.n_head
 
@@ -18,7 +18,7 @@ class MultiHeadAttention(nn.Module):
         self.W_v = nn.Linear(cfg['emb_dim'], cfg['emb_dim'])
         self.W_q = nn.Linear(cfg['emb_dim'], cfg['emb_dim'])
         self.dropout = nn.Dropout(cfg['drop_rate'])
-        self.out_proj = nn.Linear(cfg['d_out'], cfg['d_out'])
+        self.out_proj = nn.Linear(cfg['emb_dim'], cfg['emb_dim'])
         self.register_buffer(
             "mask",
             torch.triu(torch.ones(cfg['context_length'], cfg['context_length']),
