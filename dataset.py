@@ -1,3 +1,4 @@
+import re
 import torch
 import tiktoken
 from torch.utils.data import Dataset, DataLoader
@@ -18,8 +19,40 @@ class Data(Dataset):
 
     def __getitem__(self, idx):
         return self.input_id[idx], self.target_id[idx]
+
+class SimpleTokenizer():
+    def __init__(self, vocab):
+        self.stoi = vocab
+        self.itos = {i : s for s, i in vocab.items()}
+    
+    def encode(self, text):
+        preprocessed = re.split(r'([,.:;?_!"()\']|--|\s)', text)
+        preprocessed = [item.strip() for item in preprocessed if item.strip()]
+        preprocessed = [item if item in self.stoi else "<|unk|>" for item in preprocessed]
+        ids = [self.stoi[s] for s in preprocessed]
+        return ids
+    
+    def decode(self, ids):
+        text = " ".join([self.itos[i]] for i in ids)
+        text = re.sub(r'\s+([,.:;?!"()\'])', r'\1', text)
+        return text
+    
+    def n_vocab(self):
+        return len(self.stoi)       
+    
+def get_simple_tokenizer():
+    files = "the-verdict.txt"
+    with open(files, 'r', encoding='utf-8') as f:
+        text = f.read()
+    preprocessed = re.split(r'([,.:;?_!"()\']|--|\s)', text)
+    preprocessed = [item.strip() for item in preprocessed if item.strip()]
+    all_tokens = sorted(list(set(preprocessed)))
+    all_tokens.extend(["<|endoftext|>" , "<|unk|>"])
+    vocab = {i:s for s,i in enumerate(all_tokens)}
+    
+    tokenizer = SimpleTokenizer(vocab)
+    return tokenizer
  
-       
 def get_tokenizer():
     # BPE tokenizer
     tokenizer = tiktoken.get_encoding('gpt2')
