@@ -2,11 +2,13 @@
 The aim of this project is to understand the *Attention* mechanism from this infamous [paper](https://arxiv.org/abs/1706.03762), especially the decoder block (taken from GPT2 architecture). The goal is to predict the next word given the context of the word. For example, given the sentence "marry want a little lamb", we want to know what comes after. In this project the GPT2 tokenizer will be used (BPE), although it is also possible to create your own tokenizer.
 
 Here are the **training/val** loss result plot:
-!plot[C:/Users/setyo.tirta/Desktop/study/Figure_1.png]
+![Figure_1](https://github.com/user-attachments/assets/339f574a-6fba-4ddf-b90d-3cc2f38f2cb5)
+
 As we can see that the model is overfitting, even though we use 10> epochs, this is due to the small dataset that was used. We can try to use a larger dataset, but I don't think my laptop could handle it, and as the goal of this project is to understand the *Attention* mechanism, i think its already sufficient enough.
 
 By using "Leaving this place is something" as our initial output, we get the output of the text generating as:
 "Leaving this place is something .
+
 
  The.H had me's at I had: lift ond persu I by the half's in medium of andd sketch sketch can-- Rick? of I see here--burn's--I's--
 I?_ rest
