@@ -1,7 +1,8 @@
 def config_data():
     config = {
         "batch_size" : 16,
-        "max_length" : 16
+        "max_length" : 16,
+        "stride" : 8
     }
     return config
 
@@ -16,3 +17,4 @@ def config_model(tokenizer):
         "drop_rate" : 0.1,
         "max_length" : 16
     }
+    return config
