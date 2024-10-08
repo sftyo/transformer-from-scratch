@@ -1,1 +1,29 @@
 # transformer-from-scratch
+The aim of this project is to understand the *Attention* mechanism from this infamous [paper](https://arxiv.org/abs/1706.03762), especially the decoder block (taken from GPT2 architecture). The goal is to predict the next word given the context of the word. For example, given the sentence "marry want a little lamb", we want to know what comes after. In this project the GPT2 tokenizer will be used (BPE), although it is also possible to create your own tokenizer.
+
+Here are the **training/val** loss result plot:
+!plot[C:/Users/setyo.tirta/Desktop/study/Figure_1.png]
+As we can see that the model is overfitting, even though we use 10> epochs, this is due to the small dataset that was used. We can try to use a larger dataset, but I don't think my laptop could handle it, and as the goal of this project is to understand the *Attention* mechanism, i think its already sufficient enough.
+
+By using "Leaving this place is something" as our initial output, we get the output of the text generating as:
+"Leaving this place is something .
+
+ The.H had me's at I had: lift ond persu I by the half's in medium of andd sketch sketch can-- Rick? of I see here--burn's--I's--
+I?_ rest
+
+
+ The head; how saw it happened glanced it, at I was with surprise; happened me me.
+
+
+I his was-- . work to exasper the last-- Toham it--I; the of but was only, the cigars it.
+
+ That was for had .'s to think to . when had he had, his_ pictures_ had, it.I--ir that it was here I, still me he he historyte me said first satisfaction them."      
+
+ The foundations.
+burn what,; wasa him from--
+
+" . had it out and.
+
+ uncertain, my him are, the_., the, and it hadThere, and to--"
+
+ As you can see, since the loss is not very good, we have a lot of non-sensical word and a lot of typos.
