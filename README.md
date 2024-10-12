@@ -1,5 +1,13 @@
-# transformer-from-scratch
+# transformer from scratch!
 The aim of this project is to understand the *Attention* mechanism from this infamous [paper](https://arxiv.org/abs/1706.03762), especially the decoder block (taken from GPT2 architecture). The goal is to predict the next word given the context of the word. For example, given the sentence "marry want a little lamb", we want to know what comes after. In this project the GPT2 tokenizer will be used (BPE), although it is also possible to create your own tokenizer.
+
+*Note: this is an on going repo, meaning new things will be added, such as RoPE embedding, GQA, etc..*
+
+# dataset
+In this project we are going to use text data from Shakespeare's novel. With the objective to produce a shakespearean texts.
+
+# results
+Since I am running this locally in my laptop, we will be using a small model, with parameters `context_length: 64, n_head: 4, n_layers: 4, d_model: 128 and batch_size: 64`, with approximately 13M parameters.
 
 Here are the **training/val** loss result plot:
 ![Figure_1](https://github.com/user-attachments/assets/339f574a-6fba-4ddf-b90d-3cc2f38f2cb5)
