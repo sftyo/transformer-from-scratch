@@ -3,6 +3,29 @@ import math
 import torch.nn as nn
 import torch.nn.functional as F
 
+def apply_rotary_emb(
+    q: torch.Tensor,
+    k: torch.Tensor
+    ) -> tuple:
+    
+    bsz, seq_len, d_model = q.size()
+    freq_range = torch.arange(d_model // 2, dtype = torch.float32)
+    freq_cis = torch.pow(10_000, -2*freq_range/d_model)
+    pos = torch.arange(seq_len, dtype = torch.float32)
+    freq = torch.einsum('i,j->ij', pos, freq_cis)
+    
+    sin_embd = torch.sin(freq).unsqueeze(0)
+    cos_embd = torch.cos(freq).unsqueeze(0)
+    
+    q_odd , q_even = q[..., 1::2], q[..., ::2]
+    k_odd, k_even = k[..., 1::2], k[..., ::2]
+    
+    q_rot = torch.cat([q_even * cos_embd - q_odd * sin_embd,
+                       q_even * sin_embd - q_odd * cos_embd], dim =  -1)
+    k_rot = torch.cat([k_even * cos_embd - k_odd * sin_embd,
+                       k_even * sin_embd - k_odd * cos_embd], dim =  -1)
+    
+    return q_rot, k_rot
 
 class MultiHeadAttention(nn.Module):
     def __init__(self, cfg):
@@ -27,9 +50,18 @@ class MultiHeadAttention(nn.Module):
 
     def forward(self, x):
         bsz, n, d_in = x.shape
-        K = self.W_k(x).view(bsz, n, self.n_head, self.head_dim).transpose(1,2)
-        Q = self.W_q(x).view(bsz, n, self.n_head, self.head_dim).transpose(1,2)
-        V = self.W_v(x).view(bsz, n, self.n_head, self.head_dim).transpose(1,2)
+        
+        Q = self.W_q(x)
+        K = self.W_k(x)
+        V = self.W_v(x)
+        
+        # apply rotary embedding
+        Q, K = apply_rotary_emb(Q, K) 
+        
+        
+        K = K.view(bsz, n, self.n_head, self.head_dim).transpose(1,2)
+        Q = Q.view(bsz, n, self.n_head, self.head_dim).transpose(1,2)
+        V = V.view(bsz, n, self.n_head, self.head_dim).transpose(1,2)
 
         attention_scores = Q @ K.transpose(2,3)
         mask_bool = self.mask.bool()[:n, :n]

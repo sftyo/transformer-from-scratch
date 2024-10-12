@@ -41,7 +41,7 @@ class SimpleTokenizer():
         return len(self.stoi)       
     
 def get_simple_tokenizer():
-    files = "the-verdict.txt"
+    files = "data/input.txt"
     with open(files, 'r', encoding='utf-8') as f:
         text = f.read()
     preprocessed = re.split(r'([,.:;?_!"()\']|--|\s)', text)
@@ -59,7 +59,7 @@ def get_tokenizer():
     return tokenizer
 
 def get_dataset(tokenizer, config):
-    files = "the-verdict.txt"
+    files = "data/input.txt"
     with open(files, 'r', encoding='utf-8') as f:
         text = f.read()
     
